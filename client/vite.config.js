@@ -9,7 +9,7 @@ export default defineConfig({
       // Add other aliases as needed
     },
   },
-  define: {
+  define: { 
     global: 'globalThis', // Global variable definition
   },
   optimizeDeps: {
