@@ -48,6 +48,24 @@ app.post("/register", async (req, res) => {
   }
 });
 
+app.post("/mailbyid", async(req,res)=>{
+  try {
+    const { id } = req.body;
+
+    // Fetch all rows where reciever matches the provided email
+    const mailData = await Mails.find({ _id: id });
+
+    if (mailData.length === 0) {
+      return res.status(404).json({ message: "No inbox data found for this email" });
+    }
+
+    
+    res.status(200).json(mailData);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+})
 // Login Route
 app.post("/login", async (req, res) => {
   try {
