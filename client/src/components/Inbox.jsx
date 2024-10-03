@@ -64,7 +64,11 @@ const Inbox = () => {
       }
 
       const data = await response.json();
-      setEmails(data); // Set fetched emails to state
+
+      // Sort the fetched emails in descending order by date
+      const sortedEmails = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      setEmails(sortedEmails); // Set sorted emails to state
     } catch (err) {
       console.error("Error fetching emails: ", err);
     }
@@ -89,8 +93,7 @@ const Inbox = () => {
                   <FaRegStar className="text-gray-400" />
                 )}
               </span>
-              <Link to={`/mail/${email._id}`} onClick={console.log("J")
-              }>
+              <Link to={`/mail/${email._id}`}>
                 {/* Sender and Email Details */}
                 <div className="flex flex-col">
                   <span className="font-bold text-sm text-gray-700">
