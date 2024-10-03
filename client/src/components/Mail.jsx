@@ -9,7 +9,7 @@ const Mail = () => {
   const [fromM, setFrom] = useState("");
   const [sub, setSub] = useState("");
   const [msg, setMsg] = useState("");
-  
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,12 +36,11 @@ const Mail = () => {
 
         const data = await response.json();
         console.log(data);
-        
-        setFrom(data[0].sender); // Set the sender email
-        setSub(data[0].subject); // Set the email subject
-        setMsg(data[0].message); // Set the email message
-        console.log(fromM, "h");
-        
+
+        // Use the properties directly, as `data` is not an array
+        setFrom(data.sender); // Set the sender email
+        setSub(data.subject); // Set the email subject
+        setMsg(data.message); // Set the email message
       } catch (err) {
         console.error("Error fetching the email details: ", err);
       }

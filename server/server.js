@@ -16,6 +16,25 @@ app.use(express.json()); // Middleware to parse JSON bodies
 // Connect to the database
 connectDB();
 
+
+app.post("/starred", async (req, res) => {
+  const { id, starred } = req.body;
+
+  // Use `findById` to get the document directly by ID
+  const mail = await Mails.findById(id);
+  if (!mail) return res.status(404).send("Mail not found");
+
+  // Update the `starred` field
+  mail.starred = starred;
+
+  // Save the updated document
+  await mail.save();
+
+  res.send(mail);
+  console.log(mail);
+  console.log(mail.starred);
+});
+
 // Register Route
 app.post("/register", async (req, res) => {
   try {
@@ -48,23 +67,29 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post("/mailbyid", async(req,res)=>{
+app.post("/mailbyid", async (req, res) => {
   try {
     const { id } = req.body;
 
-    // Fetch all rows where reciever matches the provided email
-    const mailData = await Mails.find({ _id: id });
+    // Fetch the document by its unique ID
+    const mailData = await Mails.findById(id);
 
-    if (mailData.length === 0) {
+    if (!mailData) {
       return res.status(404).json({ message: "No inbox data found for this email" });
     }
 
-    
+    // Set the `read` status to true
+    if (mailData.read == false) {
+      mailData.read = true;
+      await mailData.save();
+    }
+
     res.status(200).json(mailData);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
+
 })
 // Login Route
 app.post("/login", async (req, res) => {
@@ -114,7 +139,7 @@ app.post("/inbox", async (req, res) => {
       return res.status(404).json({ message: "No inbox data found for this email" });
     }
 
-    
+
     res.status(200).json(inboxData);
   } catch (err) {
     console.error(err);
@@ -123,9 +148,9 @@ app.post("/inbox", async (req, res) => {
 });
 
 
-app.post("/sendmail", async (req,res)=>{
-  try{
-    const  {sender, reciever, subject, message} = req.body;
+app.post("/sendmail", async (req, res) => {
+  try {
+    const { sender, reciever, subject, message } = req.body;
     console.log(req.body);
     if (!sender || !reciever || !subject || !message) {
       return res.status(400).json({ error: "All fields are required." });
@@ -135,7 +160,7 @@ app.post("/sendmail", async (req,res)=>{
 
     res.status(201).json({ message: "Successfully registered" });
   }
-  catch(err){
+  catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
