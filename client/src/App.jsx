@@ -6,6 +6,7 @@ import Body from './components/Body';
 import Mail from './components/Mail';
 import Login from './components/Login';
 import Register from './components/Register';
+import StarredMails from './components/StarredMails';
 
 // Component to capture and set the current path
 function CurrentPath({ setPath }) {
@@ -34,6 +35,7 @@ function App() {
           <Route path="/" element={<Body isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} />}>
             <Route index element={<Inbox />} /> {/* Default child route */}
             <Route path="mail/:id" element={<Mail />} /> {/* Mail component with dynamic ID */}
+            <Route path="/StarredMails" element={<StarredMails />} /> {/* Mail component with dynamic ID */}
           </Route>
 
           {/* Define Login and Register routes separately */}

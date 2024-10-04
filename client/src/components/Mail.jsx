@@ -35,7 +35,6 @@ const Mail = () => {
         }
 
         const data = await response.json();
-        console.log(data);
 
         // Use the properties directly, as `data` is not an array
         setFrom(data.sender); // Set the sender email

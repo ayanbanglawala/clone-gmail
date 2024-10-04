@@ -30,7 +30,6 @@ const Login = () => {
 
       if (response.ok) {
         const result = await response.json();
-        console.log(result.userToken); // Log the received token
         localStorage.setItem('token', result.userToken); // Store JWT token securely
         navigate("/");
       } else {

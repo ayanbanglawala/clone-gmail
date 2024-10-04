@@ -7,20 +7,33 @@ import { IoSendSharp } from "react-icons/io5";
 import { FaRegFile } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineClose } from 'react-icons/ai'; // Close icon
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'; // Import useLocation for URL tracking
 import ComposeBox from './ComposeBox'; // Import the ComposeBox component
 
-const Sidebar = ({ isSidebarOpen, setSidebarOpen },props) => {
+const Sidebar = ({ isSidebarOpen, setSidebarOpen }) => {
   const [isComposeOpen, setComposeOpen] = useState(false); // State to manage ComposeBox visibility
+  const [activeItem, setActiveItem] = useState("inbox"); // State to track the active sidebar item
 
+  // Get current URL path to determine active item based on route
+  const location = useLocation();
+
+  // Sidebar items configuration
   const sidebarItems = [
     { id: 'inbox', label: 'Inbox', icon: <MdInbox />, page: "/" },
-    { id: 'starred', label: 'Starred', icon: <MdOutlineStarBorder /> },
-    { id: 'snoozed', label: 'Snoozed', icon: <FaRegClock /> },
-    { id: 'sent', label: 'Sent', icon: <IoSendSharp /> },
-    { id: 'draft', label: 'Draft', icon: <FaRegFile /> },
-    { id: 'more', label: 'More', icon: <IoIosArrowDown /> },
+    { id: 'starred', label: 'Starred', icon: <MdOutlineStarBorder />, page: "/StarredMails" },
+    { id: 'snoozed', label: 'Snoozed', icon: <FaRegClock />, page: "/snoozed" },
+    { id: 'sent', label: 'Sent', icon: <IoSendSharp />, page: "/sent" },
+    { id: 'draft', label: 'Draft', icon: <FaRegFile />, page: "/draft" },
+    { id: 'more', label: 'More', icon: <IoIosArrowDown />, page: "/more" },
   ];
+
+  // Effect to update the active item based on URL path
+  React.useEffect(() => {
+    const currentItem = sidebarItems.find(item => item.page === location.pathname);
+    if (currentItem) {
+      setActiveItem(currentItem.id);
+    }
+  }, [location, sidebarItems]);
 
   return (
     <div className='w-0 lg:w-[16%]'>
@@ -51,7 +64,8 @@ const Sidebar = ({ isSidebarOpen, setSidebarOpen },props) => {
           {sidebarItems.map((item) => (
             <Link to={item.page} key={item.id}>
               <li
-                className={`flex w-[80%] rounded-r-2xl pl-6 cursor-pointer h-9 justify-start items-center ${item.id === 'inbox' ? 'bg-[#D3E3FD] font-bold' : 'hover:bg-[#EAEBEF]'
+                onClick={() => setActiveItem(item.id)} // Set the active item on click
+                className={`flex w-[80%] rounded-r-2xl pl-6 cursor-pointer h-9 justify-start items-center ${activeItem === item.id ? 'bg-[#D3E3FD] font-bold' : 'hover:bg-[#EAEBEF]'
                   }`}
               >
                 {item.icon}

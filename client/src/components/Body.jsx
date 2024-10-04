@@ -33,7 +33,6 @@ const Body = ({ isSidebarOpen, setSidebarOpen }) => {
       navigate("/login");
     }
   }, [navigate]);
-console.log(username);
 
   return (
     <div className="flex">

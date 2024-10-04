@@ -3,7 +3,7 @@ import { FaStar, FaRegStar } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import online from "../assets/online.png";
 
-const Inbox = () => {
+const StarredMails = () => {
   const navigate = useNavigate();
   const [emails, setEmails] = useState([]); // State to store emails
   const [from, setFrom] = useState("");
@@ -32,9 +32,7 @@ const Inbox = () => {
         },
         body: JSON.stringify({ id, starred: updatedStarred }), // Use the correct body structure
       });
-      if (!response.ok) {
-        alert("Error..");
-      }
+
 
       // Update the local emails state with the new starred status
       setEmails((prevEmails) =>
@@ -65,9 +63,11 @@ const Inbox = () => {
 
       const data = await response.json();
 
-      // Sort the fetched emails in descending order by date
-      const sortedEmails = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+      const starredEmails = data.filter(email => email.starred === true);
 
+      // Sort the fetched emails in descending order by date
+      const sortedEmails = starredEmails.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
       setEmails(sortedEmails); // Set sorted emails to state
     } catch (err) {
       console.error("Error fetching emails: ", err);
@@ -123,4 +123,4 @@ const Inbox = () => {
   );
 };
 
-export default Inbox;
+export default StarredMails;
