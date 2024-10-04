@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import googleLogo from '../assets/gmail.png'; // Download a Google logo image and import it
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -31,9 +32,8 @@ const Login = () => {
         const result = await response.json();
         console.log(result.userToken); // Log the received token
         localStorage.setItem('token', result.userToken); // Store JWT token securely
-        navigate("/"); 
-      }
-      else {
+        navigate("/");
+      } else {
         // Handle login failure
         const errorResult = await response.json();
         setError(errorResult.error || "Login failed. Please try again.");
@@ -45,22 +45,29 @@ const Login = () => {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-4 bg-white rounded shadow-lg">
-        <h2 className="text-2xl font-bold text-center">Login to Gmail Clone</h2>
+    <div className="flex items-center justify-center h-screen bg-gray-100">
+      <div className="w-full max-w-md p-10 bg-white rounded-lg shadow-md">
+        {/* Google Logo */}
+        <div className="flex justify-center mb-6">
+          <img src={googleLogo} alt="Google Logo" className="w-32" />
+        </div>
+
+        {/* Title */}
+        <h2 className="mb-8 text-2xl font-semibold text-center text-gray-800">
+          Sign in
+        </h2>
 
         {/* Error Message */}
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+        {error && <p className="mb-4 text-sm text-center text-red-500">{error}</p>}
 
         {/* Login Form */}
         <form onSubmit={handleLogin}>
           {/* Email Input */}
-          <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
+          <div className="mb-6">
             <input
               type="email"
-              className="w-full p-2 mt-2 border rounded"
-              placeholder="Enter your email"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Email or phone"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -68,11 +75,10 @@ const Login = () => {
           </div>
 
           {/* Password Input */}
-          <div className="mb-4">
-            <label className="block text-gray-700">Password</label>
+          <div className="mb-6">
             <input
               type="password"
-              className="w-full p-2 mt-2 border rounded"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -83,21 +89,26 @@ const Login = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full p-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+            className="w-full py-3 text-white bg-blue-600 rounded hover:bg-blue-700"
           >
-            Login
+            Next
           </button>
         </form>
 
+        {/* Divider */}
+        <div className="flex items-center justify-center mt-4 mb-2">
+          <hr className="w-full border-t border-gray-300" />
+        </div>
+
         {/* Register Link */}
         <div className="text-center">
-          <p className="text-gray-600">
+          <p className="text-sm text-gray-600">
             Don't have an account?{" "}
             <span
-              className="text-blue-500 cursor-pointer"
+              className="text-blue-600 cursor-pointer hover:underline"
               onClick={() => navigate("/register")}
             >
-              Register here
+              Create account
             </span>
           </p>
         </div>
